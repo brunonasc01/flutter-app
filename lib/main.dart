@@ -78,7 +78,7 @@ class _MyHomePageState extends State<MyHomePage> {
     });
   }
 
-  List<Transaction> get  _recentTransactions {
+  List<Transaction> get _recentTransactions {
     return _transactions.where((tx) {
       return tx.date.isAfter(DateTime.now().subtract(Duration(days: 7)));
     }).toList();
@@ -86,18 +86,29 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
+    final appBar = AppBar(title: Text('Expenses App'), actions: <Widget>[
+      IconButton(
+          onPressed: () => _startAddNewTransaction(context),
+          icon: Icon(Icons.add))
+    ]);
     return Scaffold(
-      appBar: AppBar(title: Text('Expenses App'), actions: <Widget>[
-        IconButton(
-            onPressed: () => _startAddNewTransaction(context),
-            icon: Icon(Icons.add))
-      ]),
+      appBar: appBar,
       body: Column(
         mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          Chart(_recentTransactions),
-          TransactionList(_transactions, _deleteTransaction),
+          Container(
+            height: (MediaQuery.of(context).size.height -
+                    appBar.preferredSize.height - MediaQuery.of(context).padding.top) *
+                0.4,
+            child: Chart(_recentTransactions),
+          ),
+          Container(
+            height: (MediaQuery.of(context).size.height -
+                    appBar.preferredSize.height - MediaQuery.of(context).padding.top) *
+                0.6,
+            child: TransactionList(_transactions, _deleteTransaction),
+          ),
         ],
       ),
       floatingActionButton: FloatingActionButton(
